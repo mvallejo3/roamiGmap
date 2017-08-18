@@ -92,6 +92,7 @@ $('.gmap')
 		this.gmap.setZoom(_zoom + 5);
 	}
 });
+```
 
 ## Making Parameters Global
 
