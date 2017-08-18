@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>roamiGmap - jQuery plugin to insert custom google maps into a page</title>
+
+	<meta charset="utf-8" />
+
+  <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i" rel="stylesheet">
+  <link href="https://opensource.keycdn.com/fontawesome/4.7.0/font-awesome.min.css" rel="stylesheet">
+
+  <!-- <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.png">
+  <link rel="apple-touch-icon" href="%PUBLIC_URL%/img/apple-icon/Icon.png"> -->
+
+	<script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
+	<script type="text/javascript" src="jquery.roamiGmap.js"></script>
+</head>
+<body>
+	<header>
+		<h1>roamiGmap</h1>
+	</header>
+
+	<section>
+		<main>
+			<h2>Demo</h2>
+
+			<h3>Basic use</h3>
+			<h4>The HTML</h4>
+			<p>To insert a map the first thing we must do is create a div and assign it a class or id so that we can reference it from our jQuery code on page load.</p>
+			<pre><code>
+&lt;div class="gmap"&gt;&lt;/div&gt;
+			</code></pre>
+
+			<h4>The JS</h4>
+			<p>Unless we <a href="#global-parameters">make parameters global</a>, <code>roamiGmap</code> requires 2 parameters: <code>key</code> (your Google Maps Javascript API key) and <code>center</code> (the center point to use for the map).</p>
+			<p>The <code>center</code> parameter must be a <code>string</code> which can be an address, place, or latitude and longitude like so: <code>'41.8339037,-87.8720447'</code>.</p>
+			<pre><code>
+$('.gmap')
+.roamiGmap({
+	key: '__your_API_key_here__',
+	center: 'Chicago, IL',
+});
+			</code></pre>
+
+			<h4>Example</h4>
+			<p>Here is a map centered to Chicago:</p>
+			<div class="roamiGmap-chicago"></div>
+
+			<h3>Preform searches on your map</h3>
+			<form id="search-chicago-gmap">
+				<input type="text" name="keyword" value="Irish Pub">
+				<button type="submit">Search keyword</button>
+			</form>
+
+			<h3>Completely Customize your map</h3>
+
+			<p>Aside from <code>center</code> which is required and <code>zoom</code> which is already part of defaults, you can pass any param that the Google Maps Javascript API takes when creating a map. The param <code>mapOptions</code> takes an object with all additional options you would like to pass. You can learn more about this <a href="https://developers.google.com/maps/documentation/javascript/3.exp/reference#MapOptions" target="_blank">here</a>.</p>
+			<p>Below is an example of passing <code>styles</code> to the <code>mapOptions</code> param.</p>
+			<div class="roamiGmap-sf"></div>
+
+			<h3>All the <code>Map Class</code> methods at your disposal</h3>
+
+			<p><code>roamiGmap()</code> returns the DOM elment that you attach the map to with a few helpful properties added. For example, the <code>gmap</code> object, references the object instantiated with the Map Class. So you can use <code>gmap</code> to control your map.</p>
+			<p>Here's an example of increasing the zoomon your map by 5 after it has loaded. For a list of all the methods go <a href="https://developers.google.com/maps/documentation/javascript/3.exp/reference#Map" target="_blank">here</a>.</p>
+
+			<h4>Control the zoom</h4>
+			<p><pre><code>
+$('.el_selector').roamiGmap({
+	center: 'Chicago, IL',
+	onMapLoad: function(){
+		var _zoom = this.gmap.getZoom();
+		this.gmap.setZoom(_zoom + 5);
+	}
+});
+			</code></pre></p>
+
+			<h3 id="global-parameters">Making Parameters Global</h3>
+
+			<p>When adding multiple maps into one page you may want to set some default paramters so that you don't have to pass them everytime you load a map. We'll use the global object <code>$.fn.roamiGmap.defaults</code> for that.</p>
+
+			<h4>Set default key</h4>
+			<p><code>$.fn.roamiGmap.defaults.key = '__your_API_key_here__';</code></p>
+
+			<h4>Load all maps in Chicago</h4>
+			<p><code>$.fn.roamiGmap.defaults.center = 'Chicago, IL';</code></p>
+
+			<p><b>NOTE:</b> Setting both examples above allows you to call a map like so: <code>$('.gmap').roamiGmap();</code></p>
+		</main>
+	</section>
+
+	<script type="text/javascript">
+		(function($){
+			// declare global key
+			// so we dont have to pass it every time.
+			$.fn.roamiGmap.defaults.key = 'AIzaSyDlL6aaAvANHgizHhDTQMyeV5nbPbflAyo';
+
+			// reference our variables for efficiency
+			var chicagoMap = $('.roamiGmap-chicago'),
+			searchChicagoMap = $('#search-chicago-gmap'),
+			sfMap = $('.roamiGmap-sf');
+
+			// build our maps on doc ready
+			$(document).ready(function(){
+				// map for chicago
+				chicagoMap.roamiGmap({
+					center: 'Chicago, IL',
+					minHeight: 400,
+					infowindow: {
+						content: '<h1>Hello, This is Chicago, IL!</h1>',
+					},
+					// bind more actions once the map has loaded
+					onMapLoad: function() {
+						var $this = this;
+						// perform searches on our map
+						// when the search form is sumbitted
+						searchChicagoMap.submit(function(e){
+							e.preventDefault();
+							var _keyword = $(e.target).find('input[name="keyword"]').val();
+							if (_keyword.length) {
+								$this.searchPlaces({
+									keyword: _keyword,
+								});
+							}
+							return false;
+						});
+					}
+				});
+
+				// san francisco map
+				sfMap.roamiGmap({
+					center: '37.7978995,-122.4149087',
+					mapOptions: {
+						styles: [{
+						  "elementType": "geometry",
+						  "stylers": [{
+						      "color": "#212121"
+						  }]
+						}, {
+						  "elementType": "labels.icon",
+						  "stylers": [{
+						      "visibility": "off"
+						  }]
+						}, {
+						  "elementType": "labels.text.fill",
+						  "stylers": [{
+						      "color": "#757575"
+						  }]
+						}, {
+						  "elementType": "labels.text.stroke",
+						  "stylers": [{
+						      "color": "#212121"
+						  }]
+						}, {
+						  "featureType": "administrative",
+						  "elementType": "geometry",
+						  "stylers": [{
+						      "color": "#757575"
+						  }]
+						}, {
+						  "featureType": "administrative.country",
+						  "elementType": "labels.text.fill",
+						  "stylers": [{
+						      "color": "#9e9e9e"
+						  }]
+						}, {
+						  "featureType": "administrative.land_parcel",
+						  "stylers": [{
+						      "visibility": "off"
+						  }]
+						}, {
+						  "featureType": "administrative.locality",
+						  "elementType": "labels.text.fill",
+						  "stylers": [{
+						      "color": "#bdbdbd"
+						  }]
+						}, {
+						  "featureType": "poi",
+						  "elementType": "labels.text.fill",
+						  "stylers": [{
+						      "color": "#757575"
+						  }]
+						}, {
+						  "featureType": "poi.park",
+						  "elementType": "geometry",
+						  "stylers": [{
+						      "color": "#181818"
+						  }]
+						}, {
+						  "featureType": "poi.park",
+						  "elementType": "labels.text.fill",
+						  "stylers": [{
+						      "color": "#616161"
+						  }]
+						}, {
+						  "featureType": "poi.park",
+						  "elementType": "labels.text.stroke",
+						  "stylers": [{
+						      "color": "#1b1b1b"
+						  }]
+						}, {
+						  "featureType": "road",
+						  "elementType": "geometry.fill",
+						  "stylers": [{
+						      "color": "#2c2c2c"
+						  }]
+						}, {
+						  "featureType": "road",
+						  "elementType": "labels.text.fill",
+						  "stylers": [{
+						      "color": "#8a8a8a"
+						  }]
+						}, {
+						  "featureType": "road.arterial",
+						  "elementType": "geometry",
+						  "stylers": [{
+						      "color": "#373737"
+						  }]
+						}, {
+						  "featureType": "road.highway",
+						  "elementType": "geometry",
+						  "stylers": [{
+						      "color": "#3c3c3c"
+						  }]
+						}, {
+						  "featureType": "road.highway.controlled_access",
+						  "elementType": "geometry",
+						  "stylers": [{
+						      "color": "#4e4e4e"
+						  }]
+						}, {
+						  "featureType": "road.local",
+						  "elementType": "labels.text.fill",
+						  "stylers": [{
+						      "color": "#616161"
+						  }]
+						}, {
+						  "featureType": "transit",
+						  "elementType": "labels.text.fill",
+						  "stylers": [{
+						      "color": "#757575"
+						  }]
+						}, {
+						  "featureType": "water",
+						  "elementType": "geometry",
+						  "stylers": [{
+						      "color": "#000000"
+						  }]
+						}, {
+						  "featureType": "water",
+						  "elementType": "labels.text.fill",
+						  "stylers": [{
+						      "color": "#3d3d3d"
+						  }]
+						}]
+					},
+				})
+			});
+		})(jQuery)
+	</script>
+</body>
+</html>
