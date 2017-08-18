@@ -93,6 +93,15 @@ $('.gmap')
 	}
 });
 
+## Making Parameters Global
+
+When adding multiple maps into one page you may want to set some default paramters so that you don't have to pass them everytime you load a map. We'll use the global object `$.fn.roamiGmap.defaults` for that.
+
+```js
+// Set default key
+$.fn.roamiGmap.defaults.key = '__your_API_key_here__';
+```
+
 ===
 
 ## Changelog
