@@ -117,7 +117,7 @@ When adding multiple maps into one page you may want to set some default paramte
 $.fn.roamiGmap.defaults.key = '__your_API_key_here__';
 ```
 
-===
+---
 
 ## Changelog
 
