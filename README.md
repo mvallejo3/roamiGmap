@@ -7,6 +7,17 @@ A jQuery plugin to easily insert google maps into any page.
 * jQuery. [Get jQuery](https://code.jquery.com/)
 * A Google Maps Javascript API key. You can get it [here](https://developers.google.com/maps/documentation/javascript/get-api-key).
 
+#### Uses Grunt
+
+If you are not familiar with how gurnt.js works you can find out more information [here](https://gruntjs.com/)
+
+```cli
+# install grunt and dependencies
+$ npm install
+# Run grunt
+$ grunt
+```
+
 ## Basic Use
 
 To insert a map the first thing we must do is create a `div` and assign it a class or id so that we can reference it from our jQuery code on page load.
