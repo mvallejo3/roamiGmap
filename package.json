@@ -1,0 +1,17 @@
+{
+  "name": "jquery.roamiGmap",
+  "version": "1.0.0",
+  "description": "jQuery plugin to insert google maps into a page. Fully customize maps and search places within the map. Insert multiple maps in one page.",
+  "author": "@mvallejo350",
+  "repository": {
+    "url": "https://github.com/mvallejo3/roamiGmap/"
+  },
+  "bugs": {
+    "url": "https://github.com/mvallejo3/roamiGmap/issues"
+  },
+  "devDependencies": {
+    "grunt": "^1.0.0",
+    "grunt-contrib-uglify": "^3.0.1",
+    "grunt-contrib-watch": "^1.0.0"
+  }
+}
