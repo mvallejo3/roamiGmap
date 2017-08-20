@@ -11,7 +11,7 @@ A jQuery plugin to easily insert google maps into any page.
 
 If you are not familiar with how gurnt.js works you can find out more information [here](https://gruntjs.com/)
 
-Install grunt and dependencies.
+Install Grunt and it's dependencies.
 ```cli
 $ npm install
 ```
