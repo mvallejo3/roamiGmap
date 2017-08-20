@@ -73,7 +73,6 @@
 
 			if (!geocoder) {
 				geocoder = new google.maps.Geocoder();
-				console.log('built geocoder');
 				if (!geocoder) {
 					console.error( 'roamiGmap() - could not build the Geocoder object.' );
 					return false;
