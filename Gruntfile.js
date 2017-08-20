@@ -21,8 +21,9 @@ module.exports = function(grunt) {
 
 		uglify: {
 			options: {
-				banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n',
-        compress: false
+        compress: false,
+				banner: '/*!\n<%= pkg.name %>.min.js <%= grunt.template.today("yyyy-mm-dd") %>\n'
+					+'version: <%= pkg.version %> */'
 			},
       build: {
         src: ['src/*.js'],
